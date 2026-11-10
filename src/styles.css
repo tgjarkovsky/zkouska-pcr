@@ -1018,6 +1018,27 @@ a.card:active {
 .md li::marker {
   color: var(--brand);
 }
+.md table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin: 8px 0;
+}
+.md th,
+.md td {
+  border: 1px solid var(--border-strong);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: top;
+  min-width: 90px;
+}
+.md th {
+  background: var(--brand-soft);
+}
+.md em {
+  color: var(--muted);
+}
 
 .meta-row {
   display: flex;
