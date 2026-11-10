@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - Poznámky „proč ne“ přímo u možností
+Po odpovědi se poznámka zobrazí pod každou špatnou možností; zdvojený seznam A–D pod vysvětlením je pryč.
+
 ## [2026-11-10] - Obsahové skripty fungují na Windows
 `scripts/lib.mjs` skládal kořen projektu z URL pathname (`C:\C:\...`), teď používá `fileURLToPath`.
 

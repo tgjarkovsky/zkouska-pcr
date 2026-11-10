@@ -14,7 +14,7 @@ interface Props {
   nextLabel?: string;
 }
 
-/** Klikací ABCD otázka: po výběru ukáže správnost, reakci Nanynky a vysvětlení ke všem možnostem. */
+/** Klikací ABCD otázka: po výběru ukáže správnost, reakci Nanynky, vysvětlení a u špatných možností proč ne. */
 export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další otázka' }: Props) {
   const [picked, setPicked] = useState<number | null>(null);
   const [line, setLine] = useState('');
@@ -49,10 +49,15 @@ export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další
             else if (i === picked) cls += ' wrong';
             else cls += ' dim';
           }
+          // u správné možnosti poznámku nezobrazujeme – pokrývá ji vysvětlení
+          const note = answered && i !== q.correct ? q.optionNotes?.[i] : undefined;
           return (
             <button key={i} className={cls} onClick={() => pick_(i)} disabled={answered && i !== picked && i !== q.correct}>
               <span className="letter">{LETTERS[i]}</span>
-              <span className="opt-text">{opt}</span>
+              <span className="opt-text">
+                <span className="opt-label">{opt}</span>
+                {note && <span className="opt-note">{note}</span>}
+              </span>
               {answered && i === q.correct && <span className="mark">✓</span>}
               {answered && i === picked && !ok && <span className="mark">✗</span>}
             </button>
@@ -69,18 +74,6 @@ export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další
           <div className="explain-body">
             <Markdown text={q.explanation} />
           </div>
-          {q.optionNotes && q.optionNotes.length > 0 && (
-            <ul className="opt-notes">
-              {q.optionNotes.map((n, i) =>
-                n ? (
-                  <li key={i} className={i === q.correct ? 'good' : i === picked ? 'bad' : ''}>
-                    <span className="note-letter">{LETTERS[i]}</span>
-                    <span>{n}</span>
-                  </li>
-                ) : null,
-              )}
-            </ul>
-          )}
           <div className="meta-row">
             <Refs refs={q.refs} />
             <SourceBadge source={q.source} />

@@ -722,6 +722,16 @@ a.card:active {
   flex: 1;
   padding-top: 4px;
 }
+.opt-label,
+.opt-note {
+  display: block;
+}
+.opt-note {
+  margin-top: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
 .mark {
   font-weight: 900;
   font-size: 1.3rem;
@@ -753,7 +763,9 @@ a.card:active {
 .option.wrong .mark {
   color: var(--bad);
 }
-.option.dim {
+/* tlumí se jen možnost, poznámka „proč ne“ zůstává čitelná */
+.option.dim .letter,
+.option.dim .opt-label {
   opacity: 0.5;
 }
 .option.selected {
@@ -798,46 +810,6 @@ a.card:active {
   background: var(--surface);
   border-radius: 14px;
   padding: 12px 14px;
-}
-.opt-notes {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 0.95rem;
-}
-.opt-notes li {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: var(--surface);
-}
-.note-letter {
-  flex: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  font-weight: 900;
-  font-size: 0.8rem;
-  background: var(--surface-2);
-  color: var(--muted);
-}
-.opt-notes li.good {
-  outline: 2px solid var(--ok);
-}
-.opt-notes li.good .note-letter {
-  background: var(--ok);
-  color: #fff;
-}
-.opt-notes li.bad .note-letter {
-  background: var(--bad);
-  color: #fff;
 }
 .explain .btn {
   margin-top: 12px;
