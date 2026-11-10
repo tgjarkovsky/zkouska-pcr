@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - Konkrétní poznámky „proč ne“
+139 strohých poznámek („Neplatí.“, „Málo.“) přepsáno tak, aby říkaly, co je na možnosti špatně. Obsah verze 6.
+
 ## [2026-11-10] - Poznámky „proč ne“ přímo u možností
 Po odpovědi se poznámka zobrazí pod každou špatnou možností; zdvojený seznam A–D pod vysvětlením je pryč.
 
