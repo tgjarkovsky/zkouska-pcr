@@ -4,7 +4,7 @@ import { buildReviewQueue, okey, qkey, shuffle, type Grade } from '../lib/progre
 import { progressStore } from '../lib/store';
 import { OralCard } from '../components/OralCard';
 import { QuizCard } from '../components/QuizCard';
-import { SessionDone, SessionHead, useXpStart } from '../components/Session';
+import { SessionDone, SessionHead } from '../components/Session';
 import { Empty, ScreenHeader } from '../components/ui';
 
 type Mix = 'all' | 'oral' | 'quiz';
@@ -12,7 +12,6 @@ type Mix = 'all' | 'oral' | 'quiz';
 export function Review({ content }: { content: Content }) {
   const [mix, setMix] = useState<Mix>('all');
   const [round, setRound] = useState(0);
-  const [xpStart, resetXp] = useXpStart();
 
   const { queue, lookup } = useMemo(() => {
     const lookup = new Map<string, { kind: 'oral'; q: Content['oral'][0] } | { kind: 'quiz'; q: Content['quiz'][0] }>();
@@ -35,7 +34,6 @@ export function Review({ content }: { content: Content }) {
   const [i, setI] = useState(0);
   const [tally, setTally] = useState({ good: 0, partial: 0, bad: 0 });
   const reset = () => {
-    resetXp();
     setI(0);
     setTally({ good: 0, partial: 0, bad: 0 });
   };
@@ -70,7 +68,6 @@ export function Review({ content }: { content: Content }) {
         </Empty>
       ) : i >= queue.length ? (
         <SessionDone
-          xpStart={xpStart}
           {...tally}
           onRestart={() => {
             setRound((r) => r + 1);

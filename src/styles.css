@@ -336,79 +336,6 @@ a.card:active {
   font-size: 1.05rem;
 }
 
-.rank-card {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.rank-row {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-.rank-badge {
-  width: 58px;
-  height: 58px;
-  flex: none;
-  border-radius: 18px;
-  display: grid;
-  place-items: center;
-  font-size: 1.9rem;
-  background: linear-gradient(145deg, #ffe08a, var(--gold));
-  box-shadow: 0 4px 0 var(--gold-dark);
-}
-.rank-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.rank-name {
-  font-size: 1.3rem;
-  font-weight: 900;
-  line-height: 1.1;
-}
-.chips-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.mini {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: var(--surface-2);
-  font-size: 0.9rem;
-}
-.mini.hot {
-  background: var(--warn-soft);
-}
-.mini-icon {
-  font-size: 1.2rem;
-  filter: grayscale(1);
-}
-.mini.hot .mini-icon {
-  filter: none;
-  animation: flicker 1.2s ease-in-out infinite;
-}
-@keyframes flicker {
-  50% {
-    transform: scale(1.15) rotate(-6deg);
-  }
-}
-.goal-ring {
-  --p: 0;
-  width: 22px;
-  height: 22px;
-  flex: none;
-  border-radius: 50%;
-  background: conic-gradient(var(--ok) calc(var(--p) * 1%), var(--border-strong) 0);
-  -webkit-mask: radial-gradient(circle, transparent 5px, #000 6px);
-  mask: radial-gradient(circle, transparent 5px, #000 6px);
-}
-
 .cta {
   display: flex !important;
   align-items: center;
@@ -527,75 +454,6 @@ a.card:active {
   margin-top: 8px;
 }
 
-.badges-strip {
-  display: flex !important;
-  flex-direction: column;
-  gap: 10px;
-}
-.badge-icons {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-.badge-icon {
-  font-size: 1.5rem;
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--surface-2);
-  filter: grayscale(1);
-  opacity: 0.4;
-}
-.badge-icon.got,
-.badge-card.got .badge-icon {
-  filter: none;
-  opacity: 1;
-  background: var(--warn-soft);
-}
-.badge-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 10px;
-}
-.badge-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 4px;
-  padding: 12px 8px;
-  border-radius: 16px;
-  background: var(--surface-2);
-}
-.badge-card .badge-icon {
-  width: 52px;
-  height: 52px;
-  font-size: 1.8rem;
-}
-.badge-card:not(.got) b {
-  color: var(--muted);
-}
-.ranks summary {
-  cursor: pointer;
-  color: var(--brand);
-  font-weight: 700;
-}
-.ranks ol {
-  margin: 8px 0 0;
-  padding-left: 1.4rem;
-  columns: 2;
-  font-size: 0.9rem;
-}
-.ranks li {
-  color: var(--muted);
-}
-.ranks li.got {
-  color: var(--text);
-  font-weight: 700;
-}
-
 /* ---------- progress ---------- */
 .bar {
   height: 10px;
@@ -612,9 +470,6 @@ a.card:active {
 }
 .bar-ok span {
   background: linear-gradient(90deg, var(--ok), #57d9a3);
-}
-.bar-xp span {
-  background: linear-gradient(90deg, var(--gold), #ffad33);
 }
 .bar-light {
   background: rgba(255, 255, 255, 0.3);
@@ -809,13 +664,6 @@ a.card:active {
 }
 .score .bad {
   color: var(--bad);
-}
-.combo {
-  color: var(--warn);
-  background: var(--warn-soft);
-  padding: 0 8px;
-  border-radius: 99px;
-  animation: pop 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
 }
 
 .q-text {
@@ -1173,10 +1021,6 @@ a.card:active {
   background: var(--warn-soft);
   color: var(--warn-dark);
 }
-.pill.xp {
-  background: linear-gradient(135deg, #ffe08a, var(--gold));
-  color: #4a3500;
-}
 
 /* ---------- list ---------- */
 .search {
@@ -1501,40 +1345,6 @@ a.card:active {
 }
 .lock-says {
   text-align: left;
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  background: rgba(12, 20, 40, 0.55);
-  backdrop-filter: blur(4px);
-  animation: fade 0.2s ease;
-}
-.celebrate {
-  width: 100%;
-  max-width: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 4px;
-}
-.celebrate-kicker {
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--warn-dark);
-}
-.celebrate-icon {
-  font-size: 2.6rem;
-  animation: pop 0.5s cubic-bezier(0.2, 1.8, 0.4, 1);
-}
-.celebrate h2 {
-  font-size: 1.6rem;
 }
 .confetti {
   position: fixed;

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { LETTERS, type QuizQ } from '../lib/types';
 import { LINES, pick } from '../lib/lines';
-import { progressStore } from '../lib/store';
 import { buzz, play } from '../lib/fx';
 import { Markdown } from './Markdown';
 import { NanynkaSays } from './Nanynka';
@@ -27,9 +26,8 @@ export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další
     const good = i === q.correct;
     setPicked(i);
     onAnswer(good);
-    const combo = progressStore.get().game.combo;
     if (good) {
-      setLine(combo >= 3 && combo % 3 === 0 ? `${pick(LINES.combo)} ${combo}× v řadě!` : pick(LINES.correct));
+      setLine(pick(LINES.correct));
       play('good');
       buzz(30);
     } else {

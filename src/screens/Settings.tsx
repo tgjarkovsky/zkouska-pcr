@@ -43,31 +43,13 @@ export function Settings({ content }: { content: Content }) {
             </button>
           ))}
         </div>
-      </section>
-
-      <section className="card">
-        <h3>Hra</h3>
-        <label className="check">
+        <label className="check" style={{ marginTop: 12 }}>
           <input
             type="checkbox"
             checked={settings.sound}
             onChange={(e) => settingsStore.set({ ...settings, sound: e.target.checked })}
           />
           Zvuky při odpovědích 🔔
-        </label>
-        <label className="field">
-          <span>Denní cíl (počet odpovědí)</span>
-          <input
-            type="number"
-            inputMode="numeric"
-            min={5}
-            max={200}
-            value={settings.dailyGoal}
-            onChange={(e) => {
-              const v = Math.round(Number(e.target.value));
-              if (Number.isFinite(v)) settingsStore.set({ ...settings, dailyGoal: Math.min(200, Math.max(5, v)) });
-            }}
-          />
         </label>
       </section>
 

@@ -9,7 +9,7 @@ export const LINES = {
   ],
   wrongPassword: ['Hmm, tohle heslo nesedí. Zkus to znovu. 🤔', 'Kdepak, s tímhle tě nepustím. Zkus to ještě jednou.'],
   greetMorning: ['Dobré ráno! Kafe v ruce, otázky v hlavě? ☕', 'Ranní ptáče dál doskáče. Dáme pár otázek?'],
-  greetDay: ['Ahoj! Dáme dneska pár otázek spolu?', 'Vítej zpátky! Jsem připravená, a ty?', 'Čau! Pojď, ať máme denní cíl v kapse.'],
+  greetDay: ['Ahoj! Dáme dneska pár otázek spolu?', 'Vítej zpátky! Jsem připravená, a ty?', 'Čau! Dáme pár otázek, ať to u zkoušky sedí?'],
   greetEvening: ['Dobrý večer! Ještě malé kolečko před spaním? 🌙', 'Večerní služba začíná. Pár otázek a hotovo!'],
   tips: [
     'Tip: kratší opakování každý den funguje líp než jedno dlouhé biflování.',
@@ -19,7 +19,6 @@ export const LINES = {
     'Tip: zkus si občas simulaci, ať si zvykneš na časový tlak.',
   ],
   correct: ['Přesně tak! 🎯', 'Paráda, sedí to jako služební čepice!', 'Výborně, takhle se to dělá! 💪', 'Jo! Tohle máš v malíčku.', 'Bingo! ⭐', 'Správně, jen tak dál!'],
-  combo: ['Jsi v ráži! 🔥', 'Série jak na střelnici! 🔥', 'Nezastavitelné! 🚀'],
   wrong: [
     'Nevadí, z chyb se učíme. Mrkni na vysvětlení. 👇',
     'Tahle byla záludná. Přečti si proč a příště to dáš!',
@@ -43,6 +42,4 @@ export const LINES = {
   examPass: ['Uspěl/a jsi! Takhle to u ostré zkoušky dopadne taky! 🎉', 'Prošlo to! Gratuluju! 🏅'],
   examFail: ['Tentokrát to nevyšlo, ale máme rozbor chyb. Projdeme ho? 💪', 'Ještě to chce trénink. Chyby si procvičíme!'],
   stats: ['Tady vidíš, jak ti to jde. Já jsem spokojená! 📈'],
-  levelUp: ['Gratuluju k povýšení! 🎖️ Pokračuj v dobré práci!'],
-  badge: ['Nový odznak do sbírky! Jen tak dál! ✨'],
 };

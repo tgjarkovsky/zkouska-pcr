@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import type { Content } from '../lib/types';
 import { okey, qkey, summarize, type Summary } from '../lib/progress';
-import { useProgress, useSettings } from '../lib/store';
-import { BADGES, currentStreak, plural, rankFor, todayCount } from '../lib/game';
+import { useProgress } from '../lib/store';
 import { LINES, pick } from '../lib/lines';
 import { NanynkaSays } from '../components/Nanynka';
 import { ProgressBar } from '../components/ui';
 
 export function Home({ content }: { content: Content }) {
   const p = useProgress();
-  const { dailyGoal } = useSettings();
   const now = Date.now();
   const oral = summarize(content.oral.map((q) => okey(q.id)), p.items, now);
   const quiz = summarize(content.quiz.map((q) => qkey(q.id)), p.items, now);
@@ -17,10 +15,6 @@ export function Home({ content }: { content: Content }) {
   const fresh = oral.total - oral.seen + (quiz.total - quiz.seen);
   const lastExam = p.exams[0];
 
-  const rank = rankFor(p.game.xp);
-  const streak = currentStreak(p.game, now);
-  const today = todayCount(p.game, now);
-  const goalPct = Math.min(100, Math.round((today / dailyGoal) * 100));
   const [greeting] = useState(() => {
     const h = new Date().getHours();
     const base = pick(h < 10 ? LINES.greetMorning : h < 18 ? LINES.greetDay : LINES.greetEvening);
@@ -33,8 +27,8 @@ export function Home({ content }: { content: Content }) {
         <div className="hero-top">
           <span className="brand">S Nanynkou ke zkoušce</span>
           <div className="hero-actions">
-            <a className="icon-btn" href="#/statistiky" aria-label="Statistiky a odznaky">
-              🏅
+            <a className="icon-btn" href="#/statistiky" aria-label="Statistiky">
+              📊
             </a>
             <a className="icon-btn" href="#/nastaveni" aria-label="Nastavení">
               ⚙️
@@ -43,40 +37,9 @@ export function Home({ content }: { content: Content }) {
         </div>
         <NanynkaSays mood="wave" size={104} className="hero-says">
           <b>{greeting.base}</b>
-          <div className="small muted">{goalPct >= 100 ? 'Denní cíl máš splněný, jsi jednička! 🌟' : greeting.tip}</div>
+          <div className="small muted">{greeting.tip}</div>
         </NanynkaSays>
       </header>
-
-      <section className="card rank-card">
-        <div className="rank-row">
-          <div className="rank-badge" aria-hidden>
-            🎖️
-          </div>
-          <div className="rank-info">
-            <div className="small muted">
-              Hodnost {rank.index + 1}/{rank.total}
-            </div>
-            <div className="rank-name">{rank.name}</div>
-            <ProgressBar value={p.game.xp - rank.from} total={(rank.to ?? p.game.xp) - rank.from || 1} tone="xp" />
-            <div className="small muted">
-              {rank.to ? `${p.game.xp} / ${rank.to} XP do povýšení` : `${p.game.xp} XP – nejvyšší hodnost!`}
-            </div>
-          </div>
-        </div>
-        <div className="chips-row">
-          <div className={`mini ${streak > 0 ? 'hot' : ''}`}>
-            <span className="mini-icon">🔥</span>
-            <b>{streak}</b> {plural(streak, 'den', 'dny', 'dní')} v řadě
-          </div>
-          <div className="mini goal">
-            <span className="goal-ring" style={{ ['--p' as string]: goalPct }} />
-            <b>
-              {today}/{dailyGoal}
-            </b>{' '}
-            dnes
-          </div>
-        </div>
-      </section>
 
       <a className="card cta" href="#/opakovani">
         <div>
@@ -102,22 +65,6 @@ export function Home({ content }: { content: Content }) {
               ? `Naposledy ${lastExam.percent} % (${lastExam.passed ? 'úspěch ✅' : 'neúspěch'}), ${new Date(lastExam.date).toLocaleDateString('cs-CZ')}`
               : 'Zkus si test nanečisto s časovým limitem'}
           </div>
-        </div>
-      </a>
-
-      <a className="card badges-strip" href="#/statistiky">
-        <div className="row between tight">
-          <b>Odznaky</b>
-          <span className="small muted">
-            {p.game.badges.length}/{BADGES.length} →
-          </span>
-        </div>
-        <div className="badge-icons">
-          {BADGES.map((b) => (
-            <span key={b.id} className={`badge-icon ${p.game.badges.includes(b.id) ? 'got' : ''}`} title={b.title}>
-              {b.icon}
-            </span>
-          ))}
         </div>
       </a>
 

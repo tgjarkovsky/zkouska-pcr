@@ -3,7 +3,6 @@ import { okey, qkey, summarize } from '../lib/progress';
 import { useProgress } from '../lib/store';
 import { formatTime } from '../lib/exam';
 import { Empty, ProgressBar, ScreenHeader } from '../components/ui';
-import { BADGES, RANKS, RANK_XP, rankFor } from '../lib/game';
 
 export function Stats({ content }: { content: Content }) {
   const p = useProgress();
@@ -19,7 +18,6 @@ export function Stats({ content }: { content: Content }) {
     .sort((a, b) => b.st!.bad - b.st!.ok - (a.st!.bad - a.st!.ok) || a.st!.box - b.st!.box)
     .slice(0, 10);
 
-  const rank = rankFor(p.game.xp);
   const totalAnswers =Object.values(p.items).reduce((n, s) => n + s.ok + s.bad, 0);
   const totalOk = Object.values(p.items).reduce((n, s) => n + s.ok, 0);
 
@@ -40,52 +38,6 @@ export function Stats({ content }: { content: Content }) {
           <span>simulací</span>
         </div>
       </div>
-
-      <section className="card rank-card">
-        <div className="rank-row">
-          <div className="rank-badge" aria-hidden>
-            🎖️
-          </div>
-          <div className="rank-info">
-            <div className="small muted">Tvoje hodnost</div>
-            <div className="rank-name">{rank.name}</div>
-            <div className="small muted">
-              {p.game.xp} XP · nejdelší série správných odpovědí {p.game.bestCombo}
-            </div>
-          </div>
-        </div>
-        <details className="ranks">
-          <summary className="small">Všechny hodnosti</summary>
-          <ol>
-            {RANKS.map((r, i) => (
-              <li key={r} className={i <= rank.index ? 'got' : ''}>
-                {r} <span className="muted small">{RANK_XP[i]} XP</span>
-              </li>
-            ))}
-          </ol>
-        </details>
-      </section>
-
-      <section className="card">
-        <h3>
-          Odznaky{' '}
-          <span className="muted small">
-            {p.game.badges.length}/{BADGES.length}
-          </span>
-        </h3>
-        <div className="badge-grid">
-          {BADGES.map((b) => {
-            const got = p.game.badges.includes(b.id);
-            return (
-              <div key={b.id} className={`badge-card ${got ? 'got' : ''}`}>
-                <span className="badge-icon">{got ? b.icon : '🔒'}</span>
-                <b>{b.title}</b>
-                <span className="small muted">{b.desc}</span>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
       <section className="card">
         <h3>Podle okruhů</h3>

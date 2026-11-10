@@ -11,7 +11,6 @@ import { Review } from './screens/Review';
 import { Exam } from './screens/Exam';
 import { Stats } from './screens/Stats';
 import { Settings } from './screens/Settings';
-import { Celebrations } from './components/Celebrations';
 import { Nanynka } from './components/Nanynka';
 
 type Status = 'loading' | 'locked' | 'ready' | 'error';
@@ -125,7 +124,6 @@ function Shell({ content }: { content: Content }) {
   return (
     <div className="app">
       <main key={route.path}>{screen}</main>
-      <Celebrations />
       <nav className="tabbar">
         {TABS.map((t) => (
           <a key={t.path} href={`#${t.path}`} className={route.path === t.path ? 'on' : ''}>
