@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { Content } from '../lib/types';
-import { okey, orderForPractice, isMastered, type Grade } from '../lib/progress';
+import { okey, orderForPractice, isMastered, unseen, type Grade } from '../lib/progress';
 import { progressStore, useProgress } from '../lib/store';
 import { go, type Route } from '../lib/router';
 import { OralCard } from '../components/OralCard';
@@ -12,22 +12,31 @@ export function Oral({ content, route }: { content: Content; route: Route }) {
   const topics = content.topics.filter((t) => t.parts.includes('oral'));
   const topic = route.query.get('t');
   const mode = route.query.get('m') === 'seznam' ? 'list' : 'cards';
-  const setParams = (t: string | null, m: string) => {
+  const onlyNew = route.query.get('n') === '1';
+  const setParams = (t: string | null, m: string, n = onlyNew) => {
     const p = new URLSearchParams();
     if (t) p.set('t', t);
     if (m === 'list') p.set('m', 'seznam');
+    if (n) p.set('n', '1');
     const s = p.toString();
     go(`/ustni${s ? `?${s}` : ''}`);
   };
 
-  const pool = useMemo(() => content.oral.filter((q) => !topic || q.topicId === topic), [content.oral, topic]);
+  // pokrok se čte jen při vstupu, aby se balíček během procvičování nezmenšoval
+  const { pool, newCount } = useMemo(() => {
+    const inScope = content.oral.filter((q) => !topic || q.topicId === topic);
+    const fresh = new Set(unseen(inScope.map((q) => okey(q.id)), progressStore.get().items));
+    return { pool: onlyNew ? inScope.filter((q) => fresh.has(okey(q.id))) : inScope, newCount: fresh.size };
+    // mode: přepnutí kartičky/seznam má načíst aktuální pokrok
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [content.oral, topic, onlyNew, mode]);
   const topicTitle = (id: string) => content.topics.find((t) => t.id === id)?.title;
 
   return (
     <div className="screen">
       <ScreenHeader
         title="Ústní zkouška"
-        sub={`${pool.length} otázek`}
+        sub={`${pool.length} ${onlyNew ? 'nových ' : ''}otázek`}
         right={
           <div className="seg">
             <button className={mode === 'cards' ? 'on' : ''} onClick={() => setParams(topic, 'cards')}>
@@ -40,10 +49,24 @@ export function Oral({ content, route }: { content: Content; route: Route }) {
         }
       />
       <TopicChips topics={topics} value={topic} onChange={(t) => setParams(t, mode)} />
+      <div className="seg">
+        <button className={onlyNew ? '' : 'on'} onClick={() => setParams(topic, mode, false)}>
+          Vše
+        </button>
+        <button className={onlyNew ? 'on' : ''} onClick={() => setParams(topic, mode, true)}>
+          Nové ({newCount})
+        </button>
+      </div>
       {pool.length === 0 ? (
-        <Empty title="Zatím tu nejsou žádné otázky">Pošli fotky podkladů a otázky se tu objeví.</Empty>
+        onlyNew ? (
+          <Empty title="Nové otázky došly 🎉" mood="cheer">
+            Všechny otázky {topic ? 'v tomhle okruhu ' : ''}už jsi aspoň jednou dostal/a. Přepni na „Vše“ nebo zkus Chytré opakování.
+          </Empty>
+        ) : (
+          <Empty title="Zatím tu nejsou žádné otázky">Pošli fotky podkladů a otázky se tu objeví.</Empty>
+        )
       ) : mode === 'cards' ? (
-        <CardDeck key={topic ?? 'all'} pool={pool} topicTitle={topicTitle} />
+        <CardDeck key={(topic ?? 'all') + (onlyNew ? '-new' : '')} pool={pool} topicTitle={topicTitle} />
       ) : (
         <OralList pool={pool} topicTitle={topicTitle} />
       )}

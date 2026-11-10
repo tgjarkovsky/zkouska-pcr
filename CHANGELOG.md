@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - Režim Nové i u ústních otázek
+Přepínač Vše / Nové pod okruhy funguje pro kartičky i seznam.
+
 ## [2026-11-10] - „Umíš“ hned po správné odpovědi, režim Nové v testu
 „Umíš“ teď znamená „naposledy správně“ (dřív až po 3 správných za sebou). V testu ABCD přibyl přepínač Vše / Nové, který dává jen dosud nezodpovězené otázky.
 
