@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyGrade, buildReviewQueue, DAY, orderForPractice, summarize, parseProgress } from '../src/lib/progress';
+import { applyGrade, buildReviewQueue, DAY, isMastered, orderForPractice, summarize, parseProgress, unseen } from '../src/lib/progress';
 import { buildQuizExam, drawOral, scoreExam, DEFAULT_EXAM, formatTime } from '../src/lib/exam';
 import { encryptJson, decryptJson } from '../shared/crypto.js';
 import type { OralQ, QuizQ } from '../src/lib/types';
@@ -40,6 +40,24 @@ describe('Leitner', () => {
     const items = { strong: { ...applyGrade(applyGrade(undefined, 'good', NOW), 'good', NOW) } };
     const order = orderForPractice(['strong', 'new1', 'new2'], items, () => 0.5);
     expect(order[2]).toBe('strong');
+  });
+  it('„umíš“ = naposledy správně: hned po správné odpovědi, chyba i „částečně“ to shodí', () => {
+    const good = applyGrade(undefined, 'good', NOW);
+    expect(isMastered(good)).toBe(true);
+    expect(summarize(['a'], { a: good }, NOW).mastered).toBe(1);
+    expect(isMastered(applyGrade(good, 'bad', NOW))).toBe(false);
+    const twoGood = applyGrade(good, 'good', NOW);
+    expect(isMastered(applyGrade(twoGood, 'partial', NOW))).toBe(false);
+    expect(isMastered(undefined)).toBe(false);
+  });
+  it('starší data bez lastGood: rozhoduje krabička ≥ 2', () => {
+    const { lastGood: _, ...old } = applyGrade(undefined, 'good', NOW);
+    expect(isMastered(old)).toBe(true);
+    expect(isMastered({ ...old, box: 1 })).toBe(false);
+  });
+  it('unseen vrátí jen dosud nezodpovězené otázky', () => {
+    const items = { a: applyGrade(undefined, 'bad', NOW) };
+    expect(unseen(['a', 'b', 'c'], items)).toEqual(['b', 'c']);
   });
   it('summarize a parseProgress', () => {
     const items = { a: applyGrade(undefined, 'good', NOW) };

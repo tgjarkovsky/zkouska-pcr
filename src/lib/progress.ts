@@ -9,6 +9,8 @@ export interface ItemStat {
   ok: number;
   bad: number;
   last: number;
+  /** zda byla poslední odpověď správná (starší uložená data ho nemají) */
+  lastGood?: boolean;
 }
 
 export interface ExamRecord {
@@ -32,7 +34,6 @@ export const DAY = 86_400_000;
 /** za kolik dní se otázka vrátí po správné odpovědi, podle krabičky */
 export const INTERVAL_DAYS = [0, 0, 1, 3, 7, 21];
 export const MAX_BOX = 5;
-export const MASTERED_BOX = 4;
 
 export const okey = (id: string) => `o:${id}`;
 export const qkey = (id: string) => `q:${id}`;
@@ -43,7 +44,7 @@ export function emptyProgress(): ProgressData {
 
 export function applyGrade(stat: ItemStat | undefined, grade: Grade, now: number): ItemStat {
   const prev: ItemStat = stat ?? { box: 1, due: now, seen: 0, ok: 0, bad: 0, last: 0 };
-  const next: ItemStat = { ...prev, seen: prev.seen + 1, last: now };
+  const next: ItemStat = { ...prev, seen: prev.seen + 1, last: now, lastGood: grade === 'good' };
   if (grade === 'good') {
     next.box = Math.min(MAX_BOX, prev.box + 1);
     next.ok = prev.ok + 1;
@@ -60,7 +61,11 @@ export function applyGrade(stat: ItemStat | undefined, grade: Grade, now: number
 }
 
 export const isDue = (s: ItemStat | undefined, now: number) => !!s && s.due <= now;
-export const isMastered = (s: ItemStat | undefined) => !!s && s.box >= MASTERED_BOX;
+/** „Umíš“ = naposledy zodpovězeno správně. U starších dat bez lastGood to odpovídá krabičce ≥ 2. */
+export const isMastered = (s: ItemStat | undefined) => !!s && (s.lastGood ?? s.box >= 2);
+
+/** Otázky, které ještě nikdy nepřišly na řadu. */
+export const unseen = (keys: string[], items: Record<string, ItemStat>) => keys.filter((k) => !items[k]);
 
 /** Fronta k opakování: nejdřív splatné (nejstarší a nejslabší první), pak nové. */
 export function buildReviewQueue(

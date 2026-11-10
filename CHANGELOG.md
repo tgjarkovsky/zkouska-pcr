@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - „Umíš“ hned po správné odpovědi, režim Nové v testu
+„Umíš“ teď znamená „naposledy správně“ (dřív až po 3 správných za sebou). V testu ABCD přibyl přepínač Vše / Nové, který dává jen dosud nezodpovězené otázky.
+
 ## [2026-11-10] - Konkrétní poznámky „proč ne“
 139 strohých poznámek („Neplatí.“, „Málo.“) přepsáno tak, aby říkaly, co je na možnosti špatně. Obsah verze 6.
 
