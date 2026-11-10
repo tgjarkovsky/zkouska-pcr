@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - Obsahové skripty fungují na Windows
+`scripts/lib.mjs` skládal kořen projektu z URL pathname (`C:\C:\...`), teď používá `fileURLToPath`.
+
 ## [2026-11-10] - Doplněny strany 1–5 a 9 sešitu ABCD
 Nový okruh Ústavní pořádek ČR (40 otázek) a 15 otázek do služebního poměru. Celkem 194 ABCD, obsah verze 5.
 
