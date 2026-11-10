@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - Upozornění u sporných odpovědí
+20 otázek, kde se podklad nemusí shodovat se zákonem nebo doporučeními, má ve vysvětlení „⚠️ Nejisté:“ s důvodem. Obsah verze 8.
+
 ## [2026-11-10] - Zbytek sešitu ABCD: +325 otázek
 Strany 19–42, 44, 46–48 a 50–59. Nové okruhy Ochrana utajovaných informací a Ochrana osobních údajů. Celkem 519 ABCD, obsah verze 7. Složka `fotky/` je v .gitignore.
 
