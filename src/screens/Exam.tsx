@@ -6,6 +6,9 @@ import { progressStore, settingsStore, useSettings } from '../lib/store';
 import { Markdown } from '../components/Markdown';
 import { OralCard } from '../components/OralCard';
 import { Empty, ScreenHeader } from '../components/ui';
+import { NanynkaSays } from '../components/Nanynka';
+import { LINES, pick } from '../lib/lines';
+import { confetti, play } from '../lib/fx';
 
 type Phase =
   | { kind: 'setup' }
@@ -58,7 +61,10 @@ export function Exam({ content }: { content: Content }) {
 
   return (
     <div className="screen">
-      <ScreenHeader title="Simulace zkoušky" sub="Zkouška nanečisto – bez nápovědy, vyhodnocení až na konci." />
+      <ScreenHeader title="Simulace zkoušky" />
+      <NanynkaSays mood="think" size={70}>
+        {LINES.examStart[0]}
+      </NanynkaSays>
 
       <section className="card">
         <h3>Test ABCD</h3>
@@ -245,13 +251,23 @@ function QuizResult({
   onAgain: () => void;
 }) {
   const [showAll, setShowAll] = useState(false);
+  const [line] = useState(() => pick(score.passed ? LINES.examPass : LINES.examFail));
+  useEffect(() => {
+    if (score.passed) {
+      confetti(220);
+      play('fanfare');
+    }
+  }, [score.passed]);
   return (
     <div className="screen">
-      <div className={`card result ${score.passed ? 'passed' : 'failed'}`}>
+      <div className={`card result pop-in ${score.passed ? 'passed' : 'failed'}`}>
+        <NanynkaSays mood={score.passed ? 'cheer' : 'sad'} size={100}>
+          {line}
+        </NanynkaSays>
         <div className="done-ring" style={{ ['--p' as string]: score.percent }}>
           <span>{score.percent} %</span>
         </div>
-        <h2>{score.passed ? 'Uspěl/a jsi ✅' : 'Tentokrát to nevyšlo ❌'}</h2>
+        <h2>{score.passed ? 'Uspěl/a jsi ✅' : 'Tentokrát to nevyšlo'}</h2>
         <p className="muted">
           Správně {score.correct} z {score.total} · čas {formatTime(durationSec)}
         </p>
@@ -333,7 +349,9 @@ function OralExam({
               </li>
             ))}
           </ol>
-          <p className="muted small">Připrav si osnovu odpovědí. Až budeš připraven/a, projdi odpovědi a ohodnoť se.</p>
+          <NanynkaSays mood="think" size={60}>
+            Připrav si osnovu odpovědí. Až budeš připraven/a, projdeme je spolu.
+          </NanynkaSays>
           <button className="btn primary block" onClick={() => setAnswering(true)}>
             Jsem připraven/a – ukázat odpovědi
           </button>
@@ -345,7 +363,10 @@ function OralExam({
   if (i >= questions.length) {
     return (
       <div className="screen">
-        <div className="card done">
+        <div className="card done pop-in">
+          <NanynkaSays mood="cheer" size={96}>
+            Hotovo! U komise to dáš stejně dobře. 🎓
+          </NanynkaSays>
           <h2>Ústní zkouška nanečisto dokončena</h2>
           <p className="muted">Celkový čas {formatTime((now - startedAt) / 1000)}.</p>
           <button className="btn primary block" onClick={onDone}>

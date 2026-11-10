@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { LETTERS, type QuizQ } from '../lib/types';
+import { LINES, pick } from '../lib/lines';
+import { progressStore } from '../lib/store';
+import { buzz, play } from '../lib/fx';
 import { Markdown } from './Markdown';
+import { NanynkaSays } from './Nanynka';
 import { Refs, SourceBadge } from './ui';
 
 interface Props {
@@ -11,20 +15,32 @@ interface Props {
   nextLabel?: string;
 }
 
-/** Klikací ABCD otázka: po výběru ukáže správnost a vysvětlení ke všem možnostem. */
+/** Klikací ABCD otázka: po výběru ukáže správnost, reakci Nanynky a vysvětlení ke všem možnostem. */
 export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další otázka' }: Props) {
   const [picked, setPicked] = useState<number | null>(null);
+  const [line, setLine] = useState('');
   const answered = picked !== null;
   const ok = picked === q.correct;
 
-  const pick = (i: number) => {
+  const pick_ = (i: number) => {
     if (answered) return;
+    const good = i === q.correct;
     setPicked(i);
-    onAnswer(i === q.correct);
+    onAnswer(good);
+    const combo = progressStore.get().game.combo;
+    if (good) {
+      setLine(combo >= 3 && combo % 3 === 0 ? `${pick(LINES.combo)} ${combo}× v řadě!` : pick(LINES.correct));
+      play('good');
+      buzz(30);
+    } else {
+      setLine(pick(LINES.wrong));
+      play('bad');
+      buzz([60, 40, 60]);
+    }
   };
 
   return (
-    <article className="card quiz">
+    <article className="card quiz pop-in">
       {topicTitle && <div className="kicker">{topicTitle}</div>}
       <h2 className="q-text">{q.question}</h2>
       <div className="options">
@@ -36,7 +52,7 @@ export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další
             else cls += ' dim';
           }
           return (
-            <button key={i} className={cls} onClick={() => pick(i)} disabled={answered && i !== picked && i !== q.correct}>
+            <button key={i} className={cls} onClick={() => pick_(i)} disabled={answered && i !== picked && i !== q.correct}>
               <span className="letter">{LETTERS[i]}</span>
               <span className="opt-text">{opt}</span>
               {answered && i === q.correct && <span className="mark">✓</span>}
@@ -48,16 +64,20 @@ export function QuizCard({ q, topicTitle, onAnswer, onNext, nextLabel = 'Další
 
       {answered && (
         <div className={`explain ${ok ? 'is-ok' : 'is-bad'}`}>
-          <div className="verdict">
-            {ok ? 'Správně!' : `Špatně – správná odpověď je ${LETTERS[q.correct]}.`}
+          <NanynkaSays mood={ok ? 'cheer' : 'sad'} size={64} className="react">
+            <b>{line}</b>
+            {!ok && <div className="small">Správná odpověď je {LETTERS[q.correct]}.</div>}
+          </NanynkaSays>
+          <div className="explain-body">
+            <Markdown text={q.explanation} />
           </div>
-          <Markdown text={q.explanation} />
           {q.optionNotes && q.optionNotes.length > 0 && (
             <ul className="opt-notes">
               {q.optionNotes.map((n, i) =>
                 n ? (
-                  <li key={i} className={i === q.correct ? 'good' : ''}>
-                    <b>{LETTERS[i]}</b> {i === q.correct ? '✓' : '✗'} {n}
+                  <li key={i} className={i === q.correct ? 'good' : i === picked ? 'bad' : ''}>
+                    <span className="note-letter">{LETTERS[i]}</span>
+                    <span>{n}</span>
                   </li>
                 ) : null,
               )}

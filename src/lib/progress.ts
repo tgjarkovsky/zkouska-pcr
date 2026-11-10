@@ -1,4 +1,5 @@
 // Čistá logika pokroku a chytrého opakování (Leitnerovy krabičky 1–5).
+import { emptyGame, type GameState } from './game';
 
 export type Grade = 'good' | 'partial' | 'bad';
 
@@ -25,6 +26,7 @@ export interface ProgressData {
   v: 1;
   items: Record<string, ItemStat>;
   exams: ExamRecord[];
+  game: GameState;
 }
 
 export const MINUTE = 60_000;
@@ -38,7 +40,7 @@ export const okey = (id: string) => `o:${id}`;
 export const qkey = (id: string) => `q:${id}`;
 
 export function emptyProgress(): ProgressData {
-  return { v: 1, items: {}, exams: [] };
+  return { v: 1, items: {}, exams: [], game: emptyGame() };
 }
 
 export function applyGrade(stat: ItemStat | undefined, grade: Grade, now: number): ItemStat {
@@ -118,5 +120,10 @@ export function parseProgress(raw: unknown): ProgressData | null {
   if (!raw || typeof raw !== 'object') return null;
   const r = raw as Partial<ProgressData>;
   if (r.v !== 1 || typeof r.items !== 'object' || r.items === null) return null;
-  return { v: 1, items: r.items, exams: Array.isArray(r.exams) ? r.exams : [] };
+  return {
+    v: 1,
+    items: r.items,
+    exams: Array.isArray(r.exams) ? r.exams : [],
+    game: { ...emptyGame(), ...(r.game && typeof r.game === 'object' ? r.game : {}) },
+  };
 }

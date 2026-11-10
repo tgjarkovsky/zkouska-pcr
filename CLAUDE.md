@@ -1,6 +1,6 @@
 # Služební zkouška – učební aplikace
 
-Statická PWA (Vite + React + TS) na přípravu ke služební zkoušce PČR. Nasazuje se automaticky na GitHub Pages při pushi do `main`.
+Statická PWA (Vite + React + TS) na přípravu ke služební zkoušce PČR. Hravý tón: maskot policistka Nanynka (`src/components/Nanynka.tsx`, hlášky v `src/lib/lines.ts`), XP/hodnosti/odznaky v `src/lib/game.ts`. Nasazuje se automaticky na GitHub Pages při pushi do `main`.
 
 ## Obsah je zašifrovaný
 

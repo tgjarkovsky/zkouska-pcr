@@ -11,6 +11,8 @@ import { Review } from './screens/Review';
 import { Exam } from './screens/Exam';
 import { Stats } from './screens/Stats';
 import { Settings } from './screens/Settings';
+import { Celebrations } from './components/Celebrations';
+import { Nanynka } from './components/Nanynka';
 
 type Status = 'loading' | 'locked' | 'ready' | 'error';
 
@@ -66,10 +68,17 @@ export default function App() {
     [payload],
   );
 
-  if (status === 'loading') return <div className="splash">Načítám…</div>;
+  if (status === 'loading')
+    return (
+      <div className="splash">
+        <Nanynka mood="happy" size={110} />
+        <p className="muted">Nanynka chystá otázky…</p>
+      </div>
+    );
   if (status === 'error')
     return (
       <div className="splash">
+        <Nanynka mood="sad" size={110} />
         <p>Obsah se nepodařilo načíst. Zkontroluj připojení k internetu a zkus to znovu.</p>
         <button className="btn primary" onClick={() => location.reload()}>
           Zkusit znovu
@@ -83,7 +92,7 @@ export default function App() {
 const TABS = [
   { path: '/', label: 'Přehled', icon: '🏠' },
   { path: '/ustni', label: 'Ústní', icon: '🗣️' },
-  { path: '/test', label: 'Test', icon: '✅' },
+  { path: '/test', label: 'Test', icon: '🎯' },
   { path: '/opakovani', label: 'Opakování', icon: '🔁' },
   { path: '/zkouska', label: 'Zkouška', icon: '⏱️' },
 ];
@@ -116,6 +125,7 @@ function Shell({ content }: { content: Content }) {
   return (
     <div className="app">
       <main key={route.path}>{screen}</main>
+      <Celebrations />
       <nav className="tabbar">
         {TABS.map((t) => (
           <a key={t.path} href={`#${t.path}`} className={route.path === t.path ? 'on' : ''}>

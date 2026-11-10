@@ -4,7 +4,7 @@ import { orderForPractice, qkey } from '../lib/progress';
 import { progressStore } from '../lib/store';
 import { go, type Route } from '../lib/router';
 import { QuizCard } from '../components/QuizCard';
-import { SessionDone, SessionHead } from '../components/Session';
+import { SessionDone, SessionHead, useXpStart } from '../components/Session';
 import { Empty, ScreenHeader, TopicChips } from '../components/ui';
 
 export function Quiz({ content, route }: { content: Content; route: Route }) {
@@ -40,6 +40,7 @@ export function Quiz({ content, route }: { content: Content; route: Route }) {
 
 function QuizDeck({ pool, topicTitle }: { pool: Content['quiz']; topicTitle: (id: string) => string | undefined }) {
   const [round, setRound] = useState(0);
+  const [xpStart, resetXp] = useXpStart();
   const deck = useMemo(
     () => orderForPractice(pool.map((q) => qkey(q.id)), progressStore.get().items),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,6 +52,7 @@ function QuizDeck({ pool, topicTitle }: { pool: Content['quiz']; topicTitle: (id
   const [wrong, setWrong] = useState<string[]>([]);
 
   const restart = () => {
+    resetXp();
     setRound((r) => r + 1);
     setI(0);
     setTally({ good: 0, bad: 0 });
@@ -60,6 +62,7 @@ function QuizDeck({ pool, topicTitle }: { pool: Content['quiz']; topicTitle: (id
   if (i >= deck.length) {
     return (
       <SessionDone
+        xpStart={xpStart}
         {...tally}
         onRestart={restart}
         extra={

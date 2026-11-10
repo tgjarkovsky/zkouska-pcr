@@ -11,8 +11,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Příprava ke služební zkoušce',
-        short_name: 'Služební zkouška',
+        name: 'S Nanynkou ke zkoušce',
+        short_name: 'Nanynka',
         description: 'Kartičky k ústní zkoušce a ABCD testy s vysvětlením.',
         lang: 'cs',
         start_url: './',
@@ -30,6 +30,13 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,enc,webmanifest}'],
         navigateFallback: 'index.html',
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/,
+            handler: 'CacheFirst',
+            options: { cacheName: 'fonts', expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 } },
+          },
+        ],
       },
     }),
   ],

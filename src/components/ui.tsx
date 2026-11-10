@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Source, Topic } from '../lib/types';
+import { Nanynka, type Mood } from './Nanynka';
 
 export function SourceBadge({ source }: { source?: Source }) {
   if (!source) return null;
@@ -58,12 +59,10 @@ export function TopicChips({
   );
 }
 
-export function Empty({ title, children }: { title: string; children?: ReactNode }) {
+export function Empty({ title, children, mood = 'think' }: { title: string; children?: ReactNode; mood?: Mood }) {
   return (
-    <div className="empty">
-      <div className="empty-icon" aria-hidden>
-        📚
-      </div>
+    <div className="empty pop-in">
+      <Nanynka mood={mood} size={130} />
       <h3>{title}</h3>
       {children && <p>{children}</p>}
     </div>

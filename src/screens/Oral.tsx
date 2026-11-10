@@ -5,7 +5,7 @@ import { progressStore, useProgress } from '../lib/store';
 import { go, type Route } from '../lib/router';
 import { OralCard } from '../components/OralCard';
 import { Markdown } from '../components/Markdown';
-import { SessionDone, SessionHead } from '../components/Session';
+import { SessionDone, SessionHead, useXpStart } from '../components/Session';
 import { Empty, Refs, ScreenHeader, SourceBadge, TopicChips } from '../components/ui';
 
 export function Oral({ content, route }: { content: Content; route: Route }) {
@@ -53,6 +53,7 @@ export function Oral({ content, route }: { content: Content; route: Route }) {
 
 function CardDeck({ pool, topicTitle }: { pool: Content['oral']; topicTitle: (id: string) => string | undefined }) {
   const [round, setRound] = useState(0);
+  const [xpStart, resetXp] = useXpStart();
   const deck = useMemo(
     () => orderForPractice(pool.map((q) => okey(q.id)), progressStore.get().items),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,12 +64,13 @@ function CardDeck({ pool, topicTitle }: { pool: Content['oral']; topicTitle: (id
   const byKey = useMemo(() => new Map(pool.map((q) => [okey(q.id), q])), [pool]);
 
   const restart = () => {
+    resetXp();
     setRound((r) => r + 1);
     setI(0);
     setTally({ good: 0, partial: 0, bad: 0 });
   };
 
-  if (i >= deck.length) return <SessionDone {...tally} onRestart={restart} />;
+  if (i >= deck.length) return <SessionDone {...tally} xpStart={xpStart} onRestart={restart} />;
   const q = byKey.get(deck[i])!;
   const grade = (g: Grade) => {
     progressStore.grade(deck[i], g);
