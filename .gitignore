@@ -6,3 +6,4 @@ dev-dist
 # čitelné podklady se necommitují – v repozitáři je jen zašifrovaný public/content.enc
 content/
 .content-password
+fotky/

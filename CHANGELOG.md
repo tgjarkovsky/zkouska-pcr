@@ -1,5 +1,8 @@
 # Changelog
 
+## [2026-11-10] - Zbytek sešitu ABCD: +325 otázek
+Strany 19–42, 44, 46–48 a 50–59. Nové okruhy Ochrana utajovaných informací a Ochrana osobních údajů. Celkem 519 ABCD, obsah verze 7. Složka `fotky/` je v .gitignore.
+
 ## [2026-11-10] - Režim Nové i u ústních otázek
 Přepínač Vše / Nové pod okruhy funguje pro kartičky i seznam.
 
