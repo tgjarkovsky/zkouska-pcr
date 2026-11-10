@@ -1,0 +1,8 @@
+node_modules
+dist
+dev-dist
+*.log
+.DS_Store
+# čitelné podklady se necommitují – v repozitáři je jen zašifrovaný public/content.enc
+content/
+.content-password
